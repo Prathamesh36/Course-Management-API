@@ -1,5 +1,8 @@
 package com.CMS.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,10 +26,15 @@ public class User {
     private String username;
     private String password;
 
-  /*  @Enumerated(EnumType.STRING)*/
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     private float progress=0.0F;
+
+
+    @OneToMany(mappedBy = "teacher")
+    @JsonIgnoreProperties("teacher") // Prevent serialization of the teacher field in courses
+    private Set<Course> courses;
 
     /*
     @Id

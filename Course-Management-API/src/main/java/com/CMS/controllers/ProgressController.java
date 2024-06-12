@@ -15,12 +15,12 @@ public class ProgressController {
     @Autowired
     private ProgressService progressService;
 
-   // @GetMapping("/{id}/progress")
+  //  @GetMapping("/{id}/progress")
     public List<Progress> getProgressByUserId(@PathVariable Long id) {
         return progressService.getProgressByUserId(id);
     }
 
-   // @PostMapping("/{id}/progress")
+  //  @PostMapping("/{id}/progress")
     public Progress updateProgress(@PathVariable Long id, @RequestBody Progress progress) {
         return progressService.updateProgress(id, progress);
     }

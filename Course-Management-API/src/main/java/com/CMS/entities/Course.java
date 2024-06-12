@@ -1,6 +1,6 @@
 package com.CMS.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,15 +23,23 @@ public class Course {
     private Long id;
 
     private String name;
+
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User teacher;
+
+    @JsonProperty("teacherId")
+    public Long getTeacherId() {
+        return teacher != null ? teacher.getId() : null;
+    }
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Lesson> lessons = new ArrayList<>();
+
+
 
 
 

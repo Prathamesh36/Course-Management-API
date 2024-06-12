@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface UserService {
@@ -18,8 +19,14 @@ public interface UserService {
     List<User> getAllUsers();
     public List<User> findAllStudents();
 
-   /* User updateUser(Long id, User user);*/
 
+    public  List<User> findAllTeachers();
+
+    User updateUser(Long id, User user);
+
+    User progress(Long id);
+
+    Optional<User> getUserProgress(Long id);
     /*  public User updateProgress(Long id, User user);*/
 
 }

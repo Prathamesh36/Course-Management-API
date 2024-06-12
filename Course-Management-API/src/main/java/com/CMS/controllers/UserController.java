@@ -1,10 +1,10 @@
 package com.CMS.controllers;
 
-import com.CMS.entities.Course;
 import com.CMS.entities.User;
 import com.CMS.repositories.UserRepo;
 import com.CMS.response.JwtResponse;
 import com.CMS.security.JwtUtil;
+import com.CMS.service.ProgressService;
 import com.CMS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +15,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ProgressService progressService;
 
     @Autowired
     UserRepo userRepo;
@@ -52,8 +56,14 @@ public class UserController {
     }
 
     @GetMapping("/users/student")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<User>> getAllStudents() {
         List<User> students = userService.findAllStudents();
+        return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/users/teacher")
+    public ResponseEntity<List<User>> getAllTeachers() {
+        List<User> students = userService.findAllTeachers();
         return ResponseEntity.ok(students);
     }
 /*
@@ -62,10 +72,15 @@ public class UserController {
         return userService.updateProgress(id, user);
     }
 */
-/*
+
     @PutMapping("/users/{id}/progress")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         User updatedUser = userService.updateUser(id, user);
         return ResponseEntity.ok(updatedUser);
-    }*/
+    }
+
+    @GetMapping("/users/{id}/progress")
+    public Optional<User> getUserProgress(@PathVariable Long id) {
+        return userService.getUserProgress(id);
+    }
 }

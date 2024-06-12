@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -51,6 +52,11 @@ public class UserServiceImpl implements UserService{
     public List<User> findAllStudents() {
         return userRepo.findByRole(Role.STUDENT);
     }
+
+    @Override
+    public List<User> findAllTeachers() {
+        return userRepo.findByRole(Role.TEACHER);
+    }
 /*
     @Override
     public User updateProgress(Long userId, User user2) {
@@ -59,7 +65,7 @@ public class UserServiceImpl implements UserService{
         return userRepo.save(user);
     }
 */
-/*
+
     @Override
     public User updateUser(Long id, User user2) {
         return userRepo.findById(id).map(user -> {
@@ -67,5 +73,18 @@ public class UserServiceImpl implements UserService{
             return userRepo.save(user);
         }).orElseThrow(() -> new RuntimeException("User not found"));
     }
-*/
+
+    @Override
+    public User progress(Long id) {
+        return null;
+    }
+
+    @Override
+    public Optional<User> getUserProgress(Long userId) {
+
+        return Optional.ofNullable(userRepo.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found")));
+    }
+
+
 }

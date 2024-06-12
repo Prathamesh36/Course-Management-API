@@ -30,17 +30,17 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/register", "/login", "/").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users").hasRole("TEACHER")
+                        .requestMatchers("/register", "/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/**").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.POST, "/courses/**").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.PUT, "/courses/**").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.DELETE, "/courses/**").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.POST, "/courses/**/lessons").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.PUT, "/courses/lessons/**").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.DELETE, "/courses/lessons/**").hasRole("TEACHER")
-                       // .requestMatchers(HttpMethod.PUT, "/users/{id}/progress").hasRole("STUDENT")
-                      //  .requestMatchers(HttpMethod.GET, "/users/**/progress").hasRole("STUDENT")
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/users/{id}/progress").hasRole("STUDENT")
+                        .requestMatchers(HttpMethod.GET, "/users/{id}/progress").hasRole("TEACHER")
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
