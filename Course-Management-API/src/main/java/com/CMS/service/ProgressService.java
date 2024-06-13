@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Service
 public interface ProgressService {
-    List<Progress> getProgressByUserId(Long id);
+  //  List<Progress> getProgressByUserId(Long id);
     Progress updateProgress(Long userId, Progress progress);
 
 

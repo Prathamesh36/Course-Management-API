@@ -1,5 +1,6 @@
 package com.CMS.service;
 
+import com.CMS.dto.CourseDto;
 import com.CMS.entities.Course;
 import com.CMS.entities.User;
 import com.CMS.exception.ResourceNotFoundException;
@@ -47,24 +48,24 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Course createCourse(Course course) {
+    public Course createCourse(CourseDto courseDto) {
         String username = getCurrentUsername();
         User teacher = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if (teacher == null) {
             throw new RuntimeException("Teacher not found");
         }
-        Course course1 = new Course();
-        course1.setName(course.getName());
-        course1.setDescription(course.getDescription());
-        course1.setTeacher(teacher);
-        return courseRepo.save(course1);
+        Course course = new Course();
+        course.setName(courseDto.getName());
+        course.setDescription(courseDto.getDescription());
+        course.setTeacher(teacher);
+        return courseRepo.save(course);
     }
 
     @Override
-    public Course updateCourse(Long id, Course course) {
+    public Course updateCourse(Long id, CourseDto courseDto) {
         Course existingCourse = courseRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Course not found"));
-        existingCourse.setName(course.getName());
-        existingCourse.setDescription(course.getDescription());
+        existingCourse.setName(courseDto.getName());
+        existingCourse.setDescription(courseDto.getDescription());
         return courseRepo.save(existingCourse);
     }
 

@@ -14,15 +14,13 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserDto {      //directly expose
-    private Long userId;
+    private Long id;
 
-    private String userName;
-
-    private String userEmail;
+    private String username;
 
     private String password;
 
-    private boolean isAdmin;
+    private String role;
 
-    private Set<Progress> progressSet = new HashSet<>();
+    private float progress;
 }

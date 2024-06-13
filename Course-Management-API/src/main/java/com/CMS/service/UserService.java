@@ -1,6 +1,6 @@
 package com.CMS.service;
 
-import com.CMS.entities.Course;
+import com.CMS.dto.UserDto;
 import com.CMS.entities.User;
 import com.CMS.exception.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,21 +12,19 @@ import java.util.Optional;
 @Service
 public interface UserService {
 
-    public User registerUser(User user);
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
-    User findByUsername(String username);
+    void registerUser(UserDto userDto);
 
-    List<User> getAllUsers();
-    public List<User> findAllStudents();
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
+    List<UserDto> findAllStudents();
 
-    public  List<User> findAllTeachers();
+    List<UserDto> findAllTeachers();
 
-    User updateUser(Long id, User user);
+    UserDto updateUser(Long id, UserDto userDto);
 
     User progress(Long id);
 
-    Optional<User> getUserProgress(Long id);
-    /*  public User updateProgress(Long id, User user);*/
+    UserDto getUserProgress(Long id);
+
 
 }

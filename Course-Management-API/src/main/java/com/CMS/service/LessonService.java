@@ -1,5 +1,6 @@
 package com.CMS.service;
 
+import com.CMS.dto.LessonDto;
 import com.CMS.entities.Lesson;
 import org.springframework.stereotype.Service;
 
@@ -7,9 +8,9 @@ import java.util.List;
 
 @Service
 public interface LessonService {
-    List<Lesson> getAllLessonsByCourseId(Long courseId);
-    Lesson getLessonById(Long id);
-    Lesson createLesson(Long courseId, Lesson lesson);
-    Lesson updateLesson(Long id, Lesson lesson);
-    void deleteLesson(Long id);
+    List<LessonDto> getAllLessonsByCourseId(Long courseId);
+    LessonDto getLessonById(Long id);
+    LessonDto createLesson(Long courseId, LessonDto lessonDto);
+    LessonDto updateLesson(Long id, LessonDto lessonDto);
+    boolean deleteLesson(Long id);
 }

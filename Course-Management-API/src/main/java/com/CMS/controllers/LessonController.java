@@ -1,5 +1,6 @@
 package com.CMS.controllers;
 
+import com.CMS.dto.LessonDto;
 import com.CMS.entities.Lesson;
 import com.CMS.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,39 +18,64 @@ public class LessonController {
     private LessonService lessonService;
 
     @GetMapping("/{courseId}/lessons")
-    public ResponseEntity<List<Lesson>> getAllLessonsByCourseId(@PathVariable Long courseId) {
-        List<Lesson> lessons = lessonService.getAllLessonsByCourseId(courseId);
-        return  ResponseEntity.ok(lessons);
+    public ResponseEntity<List<LessonDto>> getAllLessonsByCourseId(@PathVariable Long courseId) {
+        try {
+            List<LessonDto> lessons = lessonService.getAllLessonsByCourseId(courseId);
+            return ResponseEntity.ok(lessons);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("/lessons/{id}")
-    public ResponseEntity<Lesson> getLessonById(@PathVariable Long id) {
-        Lesson lesson = lessonService.getLessonById(id);
-        if (lesson != null) {
-            return ResponseEntity.ok(lesson);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    public ResponseEntity<LessonDto> getLessonById(@PathVariable Long id) {
+        try {
+            LessonDto lesson = lessonService.getLessonById(id);
+            if (lesson != null) {
+                return ResponseEntity.ok(lesson);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @PostMapping("/{courseId}/lessons")
-    public ResponseEntity<Lesson> createLesson(@PathVariable Long courseId, @RequestBody Lesson lesson) {
-        Lesson createdLesson = lessonService.createLesson(courseId, lesson);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdLesson);
+    public ResponseEntity<?> createLesson(@PathVariable Long courseId, @RequestBody LessonDto lessonDto) {
+        try {
+            LessonDto createdLesson = lessonService.createLesson(courseId, lessonDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdLesson);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create lesson: " + e.getMessage());
+        }
     }
 
     @PutMapping("/lessons/{id}")
-    public ResponseEntity<Lesson> updateLesson(@PathVariable Long id, @RequestBody Lesson lesson) {
-        Lesson updatedLesson = lessonService.updateLesson(id, lesson);
-        if (updatedLesson != null) {
-            return ResponseEntity.ok(updatedLesson);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    public ResponseEntity<?> updateLesson(@PathVariable Long id, @RequestBody LessonDto lessonDto) {
+        try {
+            LessonDto updatedLesson = lessonService.updateLesson(id, lessonDto);
+            if (updatedLesson != null) {
+                return ResponseEntity.ok(updatedLesson);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found with id: " + id);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update lesson: " + e.getMessage());
         }
     }
 
     @DeleteMapping("/lessons/{id}")
-    public void deleteLesson(@PathVariable Long id) {
-        lessonService.deleteLesson(id);
+    public ResponseEntity<?> deleteLesson(@PathVariable Long id) {
+        try {
+            boolean isDeleted = lessonService.deleteLesson(id);
+            if (isDeleted) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found with id: " + id);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete lesson: " + e.getMessage());
+        }
     }
 }

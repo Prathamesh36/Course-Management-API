@@ -20,11 +20,11 @@ public class ProgressServiceImpl  implements  ProgressService{
     @Autowired
     private UserRepo userRepo;
 
-
+/*
     @Override
     public List<Progress> getProgressByUserId(Long id) {
         return progressRepo.findByUserId(id);
-    }
+    }*/
 
     @Override
     public Progress updateProgress(Long userId, Progress progress) {

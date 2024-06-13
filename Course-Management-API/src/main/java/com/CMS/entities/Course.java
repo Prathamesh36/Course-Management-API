@@ -20,7 +20,7 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long courseId;
 
     private String name;
 
@@ -32,7 +32,7 @@ public class Course {
 
     @JsonProperty("teacherId")
     public Long getTeacherId() {
-        return teacher != null ? teacher.getId() : null;
+        return teacher != null ? teacher.getUserId() : null;
     }
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)

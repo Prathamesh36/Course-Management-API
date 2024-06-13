@@ -1,5 +1,6 @@
 package com.CMS.service;
 
+import com.CMS.dto.LessonDto;
 import com.CMS.entities.Course;
 import com.CMS.entities.Lesson;
 import com.CMS.exception.ResourceNotFoundException;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LessonServiceImpl implements LessonService{
@@ -20,33 +22,52 @@ public class LessonServiceImpl implements LessonService{
     private CourseRepo courseRepo;
 
     @Override
-    public List<Lesson> getAllLessonsByCourseId(Long courseId) {
-        return lessonRepo.findByCourseId(courseId);
+    public List<LessonDto> getAllLessonsByCourseId(Long courseId) {
+        List<Lesson> lessons = lessonRepo.findByCourseId(courseId);
+        return lessons.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @Override
-    public Lesson getLessonById(Long id) {
-        return lessonRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
+    public LessonDto getLessonById(Long id) {
+        return lessonRepo.findById(id).map(this::convertToDto).orElse(null);
     }
 
     @Override
-    public Lesson createLesson(Long courseId, Lesson lesson) {
+    public LessonDto createLesson(Long courseId, LessonDto lessonDto) {
         Course course = courseRepo.findById(courseId).orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+        Lesson lesson = new Lesson();
         lesson.setCourse(course);
         lesson.setCourseId(courseId);
-        return lessonRepo.save(lesson);
+        lesson.setCourse(course);
+        Lesson savedLesson = lessonRepo.save(lesson);
+        return convertToDto(savedLesson);
     }
 
     @Override
-    public Lesson updateLesson(Long id, Lesson lesson) {
-        Lesson existingLesson = lessonRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
-        existingLesson.setTitle(lesson.getTitle());
-        existingLesson.setContent(lesson.getContent());
-        return lessonRepo.save(existingLesson);
+    public LessonDto updateLesson(Long id, LessonDto lessonDto) {
+        Lesson lesson = lessonRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Lesson not found"));
+        lesson.setTitle(lessonDto.getTitle());
+        lesson.setContent(lessonDto.getContent());
+        Lesson updatedLesson = lessonRepo.save(lesson);
+        return convertToDto(updatedLesson);
     }
 
     @Override
-    public void deleteLesson(Long id) {
-        lessonRepo.deleteById(id);
+    public boolean deleteLesson(Long id) {
+        if (lessonRepo.existsById(id)) {
+            lessonRepo.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private LessonDto convertToDto(Lesson lesson) {
+        LessonDto lessonDto = new LessonDto();
+        lessonDto.setId(lesson.getLessonId());
+        lessonDto.setTitle(lesson.getTitle());
+        lessonDto.setContent(lesson.getContent());
+        lessonDto.setCourseId(lesson.getCourse().getCourseId());
+        return lessonDto;
     }
 }

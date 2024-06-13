@@ -14,7 +14,7 @@ public class ProgressController {
 
     @Autowired
     private ProgressService progressService;
-
+/*
   //  @GetMapping("/{id}/progress")
     public List<Progress> getProgressByUserId(@PathVariable Long id) {
         return progressService.getProgressByUserId(id);
@@ -24,5 +24,5 @@ public class ProgressController {
     public Progress updateProgress(@PathVariable Long id, @RequestBody Progress progress) {
         return progressService.updateProgress(id, progress);
     }
-
+*/
 }

@@ -1,5 +1,6 @@
 package com.CMS.controllers;
 
+import com.CMS.dto.UserDto;
 import com.CMS.entities.User;
 import com.CMS.repositories.UserRepo;
 import com.CMS.response.JwtResponse;
@@ -24,63 +25,65 @@ public class UserController {
     UserService userService;
 
     @Autowired
-    ProgressService progressService;
-
-    @Autowired
-    UserRepo userRepo;
-
-    @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        userService.registerUser(user);
-        return ResponseEntity.ok("User registered successfully");
+    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto) {
+        try{
+            userService.registerUser(userDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to register user: "+ e.getMessage());
+        }
+
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user) {
+    public ResponseEntity<?> loginUser(@RequestBody UserDto userDto) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+                    new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
             );
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-        final UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
+        final UserDetails userDetails = userService.loadUserByUsername(userDto.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
     @GetMapping("/users/student")
-    public ResponseEntity<List<User>> getAllStudents() {
-        List<User> students = userService.findAllStudents();
+    public ResponseEntity<List<UserDto>> getAllStudents() {
+        List<UserDto> students = userService.findAllStudents();
         return ResponseEntity.ok(students);
     }
 
     @GetMapping("/users/teacher")
-    public ResponseEntity<List<User>> getAllTeachers() {
-        List<User> students = userService.findAllTeachers();
+    public ResponseEntity<List<UserDto>> getAllTeachers() {
+        List<UserDto> students = userService.findAllTeachers();
         return ResponseEntity.ok(students);
     }
-/*
-    @PutMapping("/users/{id}/progress")
-    public User updateProgress(@PathVariable Long id, @RequestBody User user){
-        return userService.updateProgress(id, user);
-    }
-*/
 
     @PutMapping("/users/{id}/progress")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
-        return ResponseEntity.ok(updatedUser);
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+        try {
+            UserDto updatedUser = userService.updateUser(id, userDto);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update progress: " + e.getMessage());
+        }
     }
 
     @GetMapping("/users/{id}/progress")
-    public Optional<User> getUserProgress(@PathVariable Long id) {
-        return userService.getUserProgress(id);
+    public ResponseEntity<?> getUserProgress(@PathVariable Long id) {
+        try {
+            UserDto userProgress = userService.getUserProgress(id);
+            return ResponseEntity.ok(userProgress);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found: " + e.getMessage());
+        }
     }
 }
