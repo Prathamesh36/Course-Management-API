@@ -21,6 +21,7 @@ This project is a Course Management System API for a Learning Management System 
      - GET /courses/{id}: Retrieve details of a specific course.
      - PUT /courses/{id}: Update a course (teachers only).
      - DELETE /courses/{id}: Delete a course (teachers only).
+     - etc.
 
 #### 3. Pagination and Sorting:
 
