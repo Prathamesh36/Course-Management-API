@@ -22,31 +22,33 @@ This project is a Course Management System API for a Learning Management System 
      - PUT /courses/{id}: Update a course (teachers only).
      - DELETE /courses/{id}: Delete a course (teachers only).
 
-#### 3. Lesson Management:
+#### 3. Pagination and Sorting:
+
+   - Supports pagination and sorting for course listings.
+   - Allows customizable page size and sorting parameters.
+     
+#### 4. Lesson Management:
 
    - CRUD operations for lessons associated with courses.
    - Managed relationships between courses and lessons.
     
-#### 4. Progress Tracking:
+#### 5. Progress Tracking:
 
    - Retrieve and update progress for students.
    - Track individual progress of students in various courses.
 
-#### 5. Database Management:
+#### 6. Database Management:
 
    - Uses a relational database (e.g., MySQL) to store and manage data.
    - Defines schemas and relationships for users, courses, lessons, and progress tracking.
 
-#### 6. Validation and Error Handling:
+#### 7. Validation and Error Handling:
 
    - Comprehensive data validation for all endpoints.
    - Global exception handling for meaningful error responses.
    - Proper HTTP status codes for different types of responses.
 
-#### 7. Pagination and Sorting:
 
-   - Supports pagination and sorting for course listings.
-   - Allows customizable page size and sorting parameters.
 
 ## Technical Details
    - Spring Boot Framework: For building the RESTful API.
