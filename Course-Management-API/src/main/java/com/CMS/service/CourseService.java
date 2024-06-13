@@ -12,7 +12,7 @@ public interface CourseService {
     Course getCourseById(Long id);
     Course createCourse(CourseDto courseDto);
     Course updateCourse(Long id, CourseDto courseDto);
-    void deleteCourse(Long id);
+    boolean deleteCourse(Long id);
     List<Course> searchCourses(String keyword);
 
 }

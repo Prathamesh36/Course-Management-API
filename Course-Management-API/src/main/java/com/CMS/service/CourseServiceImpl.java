@@ -70,8 +70,13 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public void deleteCourse(Long id) {
-        courseRepo.deleteById(id);
+    public boolean deleteCourse(Long id) {
+        if (courseRepo.existsById(id)) {
+            courseRepo.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

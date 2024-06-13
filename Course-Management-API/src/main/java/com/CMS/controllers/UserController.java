@@ -1,11 +1,8 @@
 package com.CMS.controllers;
 
 import com.CMS.dto.UserDto;
-import com.CMS.entities.User;
-import com.CMS.repositories.UserRepo;
 import com.CMS.response.JwtResponse;
 import com.CMS.security.JwtUtil;
-import com.CMS.service.ProgressService;
 import com.CMS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserController {

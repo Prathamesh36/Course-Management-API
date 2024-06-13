@@ -70,7 +70,7 @@ public class LessonController {
         try {
             boolean isDeleted = lessonService.deleteLesson(id);
             if (isDeleted) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+                return ResponseEntity.status(HttpStatus.OK).body("Lesson deleted successfully");
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found with id: " + id);
             }
