@@ -40,7 +40,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserDto userDto) {
         try {
-            authenticationManager.authenticate(
+            authenticationManager.authenticate(             //internally uses loadUser and Bcrypt password method
                     new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())
             );
         } catch (Exception e) {
@@ -48,7 +48,8 @@ public class UserController {
         }
         final UserDetails userDetails = userService.loadUserByUsername(userDto.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(jwt));
+        //return ResponseEntity.ok(new JwtResponse(jwt));
+        return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 
     @GetMapping("/users/student")
